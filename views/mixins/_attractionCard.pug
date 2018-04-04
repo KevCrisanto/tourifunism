@@ -1,0 +1,10 @@
+mixin attractionCard(attraction ={})
+    .attraction
+        .attraction__hero
+            .attraction__actions
+                button soon
+            img(src=`/uploads/${attraction.photo || 'attraction.png'}`)
+            h2.title
+                a(href=`/attraction/${attraction.slug}`) #{attraction.name}
+        .attraction__details
+            p= attraction.description.split(' ').slice(0, 25).join(' ')

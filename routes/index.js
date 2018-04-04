@@ -1,9 +1,11 @@
 const express = require('express');
+const attractionController = require('../controllers/attractionController');
+const { catchErrors } = require('../handlers/errorHandlers');
+
 const router = express.Router();
-const storeController = require('../controllers/storeController');
 
-router.get('/', storeController.homePage);
-router.get('/add', storeController.addStore);
-router.post('/add', storeController.createStore);
-
+router.get('/', catchErrors(attractionController.getAttractions));
+router.get('/attractions', catchErrors(attractionController.getAttractions));
+router.get('/add', attractionController.addAttraction);
+router.post('/add', catchErrors(attractionController.createAttraction));
 module.exports = router;

@@ -1,0 +1,10 @@
+extends layout
+
+include mixins/_attractionCard
+
+block content
+    .inner 
+        h2 #{title}
+        .attractions
+            each attraction in attractions
+                +attractionCard(attraction)

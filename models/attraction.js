@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const slug = require('slugs');
 
-const storeSchema = new mongoose.Schema({
+const attractionSchema = new mongoose.Schema({
     name: {
         type: String,
         trim: true,
-        required: 'Pleae enter a store name!'
+        required: 'Pleae enter the name of the tourist attraction!'
     },
     slug: String,
     description: {
@@ -16,7 +16,7 @@ const storeSchema = new mongoose.Schema({
     tags: [String]
 });
 
-storeSchema.pre('save', function(next){
+attractionSchema.pre('save', function(next){
     if (!this.isModified('name')){
         next(); // skip it
         return; // stop this function from running
@@ -25,4 +25,4 @@ storeSchema.pre('save', function(next){
     next();
 })
 
-module.exports = mongoose.model('Store', storeSchema);
+module.exports = mongoose.model('Attraction', attractionSchema);
