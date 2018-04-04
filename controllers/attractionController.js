@@ -18,8 +18,32 @@ exports.createAttraction = async (req, res) => {
 };
 
 exports.getAttractions = async (req, res) => {
-  // 1. Query the database for a list of all stores
+  // 1. Query the database for a list of all attractions
   const attractions = await Attraction.find();
   console.log(attractions);
   res.render('attractions', { title: 'Tourist attractions', attractions }); // attractions: 'attractions'
+};
+
+exports.editAttraction = async (req, res) => {
+  // 1. Find the attraction given the ID
+  const attraction = await Attraction.findOne({ _id: req.params.id });
+  // 2. Confirm the user posted the attraction
+  // 3. Render out the edit form to the user
+  res.render('editAttraction', { title: `Edit ${attraction.name}`, attraction });
+};
+
+exports.updateAttraction = async (req, res) => {
+  // find and update the attraction
+  const attraction = await Attraction.findOneAndUpdate({ _id: req.params.id }, req.body, {
+    new: true, // return the new data instead of the old one
+    runValidators: true, // force to run validators
+  }).exec();
+  // Redirect then the attraction and tell them it worked
+  req.flash(
+    'success',
+    `Successfully updated <strong>${attraction.name}</strong>. <a href="/attractions/${
+      attraction.slug
+    }">View tourist attraction ➡</a>`
+  );
+  res.redirect(`/attractions/${attraction._id}/edit`);
 };
