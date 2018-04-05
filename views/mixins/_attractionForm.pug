@@ -4,6 +4,14 @@ mixin attractionForm(attraction = {})
         input(type="text" name="name" value=attraction.name)
         label(for="description") Description
         textarea(name="description")= attraction.description
+        //- address, lng and lat
+        label(for="address") Address
+        input(type="text" id="address" name="location[address]" value=(attraction.location && attraction.location.address))
+        label(for="lng") Address Lng
+        input(type="text" id="lng" name="location[coordinates][0]" value=(attraction.location && attraction.location.coordinates[0]) required)
+        label(for="lat") Address Lat
+        input(type="text" id="lat" name="location[coordinates][1]" value=(attraction.location && attraction.location.coordinates[1]) required)
+
         - const choices = ['Free admission', 'Museum', 'Nature', 'Stadium', 'Theme park']
         - const tags = attraction.tags || []
         ul.tags

@@ -33,6 +33,8 @@ exports.editAttraction = async (req, res) => {
 };
 
 exports.updateAttraction = async (req, res) => {
+  // set the location data to be a point
+  req.body.location.type = 'Point';
   // find and update the attraction
   const attraction = await Attraction.findOneAndUpdate({ _id: req.params.id }, req.body, {
     new: true, // return the new data instead of the old one
