@@ -35,6 +35,7 @@ const attractionSchema = new mongoose.Schema({
       required: 'You must supply and address!',
     },
   },
+  photo: String,
 });
 
 attractionSchema.pre('save', function(next) {

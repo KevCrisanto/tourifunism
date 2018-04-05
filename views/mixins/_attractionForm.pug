@@ -1,9 +1,14 @@
 mixin attractionForm(attraction = {})
-    form(action=`/add/${attraction._id || ''}` method="POST" class="card")
+    form(action=`/add/${attraction._id || ''}` method="POST" class="card" enctype="multipart/form-data")
         label(for="name") Name
         input(type="text" name="name" value=attraction.name)
         label(for="description") Description
         textarea(name="description")= attraction.description
+        //- Image upload
+        label(for="photo") Photo
+          input(type="file" name="photo" id="photo" accept="image/gif, image/png, image/jpeg")
+          if attraction.photo
+            img(src=`/uploads/${attraction.photo}`, alt=attraction.name width=200)
         //- address, lng and lat
         label(for="address") Address
         input(type="text" id="address" name="location[address]" value=(attraction.location && attraction.location.address))
