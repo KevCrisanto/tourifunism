@@ -38,12 +38,18 @@ const attractionSchema = new mongoose.Schema({
   photo: String,
 });
 
-attractionSchema.pre('save', function(next) {
+attractionSchema.pre('save', async function(next) {
   if (!this.isModified('name')) {
     next(); // skip it
     return; // stop this function from running
   }
   this.slug = slug(this.name);
+  // find other stores that have a slug of att, att-1, att-2
+  const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
+  const attractionsWithSlug = await this.constructor.attractionSchema.find({ slug: slugRegEx });
+  if (attractionsWithSlug.length) {
+    this.slug = `${this.slug}-${attractionsWithSlug.length + 1}`;
+  }
   next();
 });
 
