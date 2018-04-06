@@ -24,4 +24,6 @@ router.post(
 
 router.get('/attractions/:id/edit', catchErrors(attractionController.editAttraction));
 
+router.get('/attraction/:slug', catchErrors(attractionController.getAttractionBySlug));
+
 module.exports = router;
