@@ -87,3 +87,13 @@ exports.getAttractionBySlug = async (req, res) => {
   if (!attraction) return next();
   res.render('attraction', { attraction, title: attraction.name });
 };
+
+exports.getAttractionsByTag = async (req, res) => {
+  const { tag } = req.params; // const tag = req.params.tag
+  // Ask for attractions with the given tag. If there's no tag, return all attractions with at least one tag
+  const tagQuery = tag || { $exists: true };
+  const tagsPromise = Attraction.getTagsList();
+  const attractionsPromise = Attraction.find({ tags: tagQuery });
+  const [tags, attractions] = await Promise.all([tagsPromise, attractionsPromise]);
+  res.render('tag', { tags, title: 'Tags', tag, attractions });
+};

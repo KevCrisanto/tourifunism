@@ -53,4 +53,13 @@ attractionSchema.pre('save', async function(next) {
   next();
 });
 
+attractionSchema.statics.getTagsList = function() {
+  // group attractions by tag and count the # of attractions in each tag, then sort by most popular
+  return this.aggregate([
+    { $unwind: '$tags' },
+    { $group: { _id: '$tags', count: { $sum: 1 } } },
+    { $sort: { count: -1 } }, // sort
+  ]);
+};
+
 module.exports = mongoose.model('Attraction', attractionSchema);

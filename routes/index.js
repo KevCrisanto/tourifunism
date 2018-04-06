@@ -26,4 +26,7 @@ router.get('/attractions/:id/edit', catchErrors(attractionController.editAttract
 
 router.get('/attraction/:slug', catchErrors(attractionController.getAttractionBySlug));
 
+router.get('/tags', catchErrors(attractionController.getAttractionsByTag));
+router.get('/tags/:tag', catchErrors(attractionController.getAttractionsByTag));
+
 module.exports = router;
