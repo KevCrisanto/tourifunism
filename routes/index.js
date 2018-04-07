@@ -1,6 +1,7 @@
 const express = require('express');
 const attractionController = require('../controllers/attractionController');
 const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
 const { catchErrors } = require('../handlers/errorHandlers');
 
 const router = express.Router();
@@ -33,8 +34,11 @@ router.get('/tags/:tag', catchErrors(attractionController.getAttractionsByTag));
 router.get('/login', userController.loginForm);
 router.get('/register', userController.registerForm);
 
-// 1. Validate registration data
-// 2. Register the user
-// 3. We need to log them in
-router.post('/register', userController.validateRegister);
+router.post(
+  '/register',
+  userController.validateRegister, // 1. Validate registration data
+  userController.register, // 2. Register the user, add it to DB
+  authController.login // 3. We need to log them in
+);
+
 module.exports = router;
