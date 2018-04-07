@@ -82,7 +82,7 @@ exports.updateAttraction = async (req, res) => {
   res.redirect(`/attractions/${attraction._id}/edit`);
 };
 
-exports.getAttractionBySlug = async (req, res) => {
+exports.getAttractionBySlug = async (req, res, next) => {
   const attraction = await Attraction.findOne({ slug: req.params.slug });
   if (!attraction) return next();
   res.render('attraction', { attraction, title: attraction.name });
