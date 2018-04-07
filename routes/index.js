@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/', catchErrors(attractionController.getAttractions));
 router.get('/attractions', catchErrors(attractionController.getAttractions));
-router.get('/add', attractionController.addAttraction);
+router.get('/add', authController.isLoggedIn, attractionController.addAttraction);
 
 router.post(
   '/add',
@@ -32,6 +32,8 @@ router.get('/tags', catchErrors(attractionController.getAttractionsByTag));
 router.get('/tags/:tag', catchErrors(attractionController.getAttractionsByTag));
 
 router.get('/login', userController.loginForm);
+router.post('/login', authController.login);
+
 router.get('/register', userController.registerForm);
 
 router.post(
@@ -41,4 +43,5 @@ router.post(
   authController.login // 3. We need to log them in
 );
 
+router.get('/logout', authController.logout);
 module.exports = router;
