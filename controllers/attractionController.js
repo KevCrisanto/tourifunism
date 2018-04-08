@@ -43,6 +43,7 @@ exports.resize = async (req, res, next) => {
 };
 
 exports.createAttraction = async (req, res) => {
+  req.body.author = req.user._id;
   const attraction = await new Attraction(req.body).save();
   // await attraction.save();
   req.flash('success', `Suuccessfully created ${attraction.name}. Care to leave a review?`);
@@ -56,10 +57,18 @@ exports.getAttractions = async (req, res) => {
   res.render('attractions', { title: 'Tourist attractions', attractions }); // attractions: 'attractions'
 };
 
+const confirmOwner = (attraction, user) => {
+  // can add Admin, like so: ...author.equals(user._id) || user.level < 10
+  if (!attraction.author.equals(user._id)) {
+    throw Error('You must have published the tourist attraction in order to edit it!');
+  }
+};
+
 exports.editAttraction = async (req, res) => {
   // 1. Find the attraction given the ID
   const attraction = await Attraction.findOne({ _id: req.params.id });
   // 2. Confirm the user posted the attraction
+  confirmOwner(attraction, req.user);
   // 3. Render out the edit form to the user
   res.render('editAttraction', { title: `Edit ${attraction.name}`, attraction });
 };
@@ -83,7 +92,7 @@ exports.updateAttraction = async (req, res) => {
 };
 
 exports.getAttractionBySlug = async (req, res, next) => {
-  const attraction = await Attraction.findOne({ slug: req.params.slug });
+  const attraction = await Attraction.findOne({ slug: req.params.slug }).populate('author');
   if (!attraction) return next();
   res.render('attraction', { attraction, title: attraction.name });
 };

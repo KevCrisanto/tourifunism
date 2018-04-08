@@ -36,6 +36,11 @@ const attractionSchema = new mongoose.Schema({
     },
   },
   photo: String,
+  author: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: 'You must supply an author',
+  },
 });
 
 attractionSchema.pre('save', async function(next) {
