@@ -56,4 +56,10 @@ router.post(
   catchErrors(authController.update)
 );
 
+/*
+  API
+*/
+
+router.get('/api/search', catchErrors(attractionController.searchAttractions));
+
 module.exports = router;

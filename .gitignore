@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 variables.env
 
+# ignore uploaded images
+public/uploads
+

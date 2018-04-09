@@ -84,7 +84,7 @@ exports.updateAttraction = async (req, res) => {
   // Redirect then the attraction and tell them it worked
   req.flash(
     'success',
-    `Successfully updated <strong>${attraction.name}</strong>. <a href="/attractions/${
+    `Successfully updated <strong>${attraction.name}</strong>. <a href="/attraction/${
       attraction.slug
     }">View tourist attraction ➡</a>`
   );
@@ -105,4 +105,27 @@ exports.getAttractionsByTag = async (req, res) => {
   const attractionsPromise = Attraction.find({ tags: tagQuery });
   const [tags, attractions] = await Promise.all([tagsPromise, attractionsPromise]);
   res.render('tag', { tags, title: 'Tags', tag, attractions });
+};
+
+exports.searchAttractions = async (req, res) => {
+  const attractions = await Attraction
+    // first find tourist attractions that match
+    .find(
+      {
+        // will search both title and description, since both are type text
+        $text: {
+          $search: req.query.q,
+        },
+      },
+      {
+        score: { $meta: 'textScore' },
+      }
+    )
+    // then sort them from highest to lowest
+    .sort({
+      score: { $meta: 'textScore' },
+    })
+    // limit to only 10 tourist attraction
+    .limit(10);
+  res.json(attractions);
 };

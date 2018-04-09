@@ -17,7 +17,7 @@ mixin attractionForm(attraction = {})
         label(for="lat") Address Lat
         input(type="text" id="lat" name="location[coordinates][1]" value=(attraction.location && attraction.location.coordinates[1]) required)
 
-        - const choices = ['Free admission', 'Museum', 'Nature', 'Stadium', 'Theme park']
+        - const choices = ['Free admission', 'Museum', 'Nature', 'Stadium', 'Theme park', 'Walk around']
         - const tags = attraction.tags || []
         ul.tags
             each choice in choices

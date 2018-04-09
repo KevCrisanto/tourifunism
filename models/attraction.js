@@ -43,6 +43,12 @@ const attractionSchema = new mongoose.Schema({
   },
 });
 
+// Define our indexes
+attractionSchema.index({
+  name: 'text',
+  description: 'text',
+});
+
 attractionSchema.pre('save', async function(next) {
   if (!this.isModified('name')) {
     next(); // skip it
@@ -51,7 +57,7 @@ attractionSchema.pre('save', async function(next) {
   this.slug = slug(this.name);
   // find other stores that have a slug of att, att-1, att-2
   const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
-  const attractionsWithSlug = await this.constructor.attractionSchema.find({ slug: slugRegEx });
+  const attractionsWithSlug = await this.constructor.find({ slug: slugRegEx });
   if (attractionsWithSlug.length) {
     this.slug = `${this.slug}-${attractionsWithSlug.length + 1}`;
   }
