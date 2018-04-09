@@ -53,7 +53,6 @@ exports.createAttraction = async (req, res) => {
 exports.getAttractions = async (req, res) => {
   // 1. Query the database for a list of all attractions
   const attractions = await Attraction.find();
-  console.log(attractions);
   res.render('attractions', { title: 'Tourist attractions', attractions }); // attractions: 'attractions'
 };
 

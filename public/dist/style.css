@@ -491,7 +491,7 @@ p {
     background-image: linear-gradient(to right, rgba(255, 196, 14, 0.8) 100%, rgba(255, 196, 14, 0.8) 50%); }
 
 .title--single {
-  max-width: 600px;
+  max-width: 700px;
   margin-top: -9rem;
   font-size: 10rem;
   text-align: center; }
