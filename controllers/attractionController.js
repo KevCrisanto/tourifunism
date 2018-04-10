@@ -128,3 +128,29 @@ exports.searchAttractions = async (req, res) => {
     .limit(10);
   res.json(attractions);
 };
+
+exports.mapAttractions = async (req, res) => {
+  const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
+  const q = {
+    location: {
+      $near: {
+        $geometry: {
+          type: 'Point',
+          coordinates,
+        },
+        $maxDistance: 10000, // 10 km
+      },
+    },
+  };
+
+  // Retrieve only photo and name: select('photo name');
+  // Don't retrieve photo: select('-photo');
+  const attractions = await Attraction.find(q)
+    .select('slug name description location photo')
+    .limit(10); // limit to 10 points in map
+  res.json(attractions);
+};
+
+exports.mapPage = (req, res) => {
+  res.render('map', { title: 'Map' });
+};

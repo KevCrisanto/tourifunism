@@ -55,11 +55,13 @@ router.post(
   authController.confirmedPasswords, // check if both passwords are the same
   catchErrors(authController.update)
 );
-
+router.get('/map', attractionController.mapPage);
 /*
   API
 */
 
 router.get('/api/search', catchErrors(attractionController.searchAttractions));
+
+router.get('/api/attractions/near', catchErrors(attractionController.mapAttractions));
 
 module.exports = router;

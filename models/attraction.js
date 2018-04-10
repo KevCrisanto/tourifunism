@@ -49,6 +49,8 @@ attractionSchema.index({
   description: 'text',
 });
 
+attractionSchema.index({ location: '2dsphere' });
+
 attractionSchema.pre('save', async function(next) {
   if (!this.isModified('name')) {
     next(); // skip it
