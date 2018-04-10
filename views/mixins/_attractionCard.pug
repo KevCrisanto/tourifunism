@@ -2,6 +2,13 @@ mixin attractionCard(attraction ={})
   .attraction
     .attraction__hero
       .attraction__actions
+        if user
+          .attraction__action.attraction__action--heart
+            form.heart(method="POST" action= `/api/attractions/${attraction._id}/heart`)
+              - const heartStrings = user.hearts.map(obj => obj.toString())
+              - const heartClass = heartStrings.includes(attraction._id.toString()) ? 'heart__button--hearted' : ''
+              button.heart__button(type="submit" name="heart" class=heartClass)
+                != h.icon('heart')
         if user && attraction.author.equals(user._id)
           .attraction__action.attraction__action--edit
             a(href=`/attractions/${attraction._id}/edit`)

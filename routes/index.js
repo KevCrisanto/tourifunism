@@ -56,6 +56,9 @@ router.post(
   catchErrors(authController.update)
 );
 router.get('/map', attractionController.mapPage);
+
+router.get('/hearts', catchErrors(attractionController.getHearts));
+
 /*
   API
 */
@@ -63,5 +66,7 @@ router.get('/map', attractionController.mapPage);
 router.get('/api/search', catchErrors(attractionController.searchAttractions));
 
 router.get('/api/attractions/near', catchErrors(attractionController.mapAttractions));
+
+router.post('/api/attractions/:id/heart', authController.isLoggedIn, catchErrors(attractionController.heartAttraction));
 
 module.exports = router;
