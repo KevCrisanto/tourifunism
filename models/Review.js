@@ -25,7 +25,16 @@ const reviewSchema = new mongoose.Schema({
     type: Number,
     min: 1,
     max: 5,
+    required: 'Your review must have a rating!',
   },
 });
+
+function autopopulate(next) {
+  this.populate('author');
+  next();
+}
+
+reviewSchema.pre('find', autopopulate);
+reviewSchema.pre('findOne', autopopulate);
 
 module.exports = mongoose.model('Review', reviewSchema);

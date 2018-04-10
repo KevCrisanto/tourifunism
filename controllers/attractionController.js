@@ -93,7 +93,7 @@ exports.updateAttraction = async (req, res) => {
 };
 
 exports.getAttractionBySlug = async (req, res, next) => {
-  const attraction = await Attraction.findOne({ slug: req.params.slug }).populate('author');
+  const attraction = await Attraction.findOne({ slug: req.params.slug }).populate('author reviews');
   if (!attraction) return next();
   res.render('attraction', { attraction, title: attraction.name });
 };

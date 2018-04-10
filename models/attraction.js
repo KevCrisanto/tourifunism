@@ -3,45 +3,51 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const slug = require('slugs');
 
-const attractionSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-    required: 'Pleae enter the name of the tourist attraction!',
-  },
-  slug: String,
-  description: {
-    type: String,
-    trim: true,
-  },
-  tags: [String],
-  created: {
-    type: Date,
-    default: Date.now,
-  },
-  location: {
-    type: {
+const attractionSchema = new mongoose.Schema(
+  {
+    name: {
       type: String,
-      default: 'Point',
+      trim: true,
+      required: 'Pleae enter the name of the tourist attraction!',
     },
-    coordinates: [
-      {
-        type: Number,
-        required: 'You must supply coordinates!',
+    slug: String,
+    description: {
+      type: String,
+      trim: true,
+    },
+    tags: [String],
+    created: {
+      type: Date,
+      default: Date.now,
+    },
+    location: {
+      type: {
+        type: String,
+        default: 'Point',
       },
-    ],
-    address: {
-      type: String,
-      required: 'You must supply and address!',
+      coordinates: [
+        {
+          type: Number,
+          required: 'You must supply coordinates!',
+        },
+      ],
+      address: {
+        type: String,
+        required: 'You must supply and address!',
+      },
+    },
+    photo: String,
+    author: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: 'You must supply an author',
     },
   },
-  photo: String,
-  author: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: 'You must supply an author',
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 // Define our indexes
 attractionSchema.index({
@@ -74,5 +80,12 @@ attractionSchema.statics.getTagsList = function() {
     { $sort: { count: -1 } }, // sort
   ]);
 };
+
+// find reviews where the attraction _id === reviews attraction property
+attractionSchema.virtual('reviews', {
+  ref: 'Review', // link to reviewSchema
+  localField: '_id', // id in attractionSchema
+  foreignField: 'attraction', // must match store in reviewSchema
+});
 
 module.exports = mongoose.model('Attraction', attractionSchema);
