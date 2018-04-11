@@ -54,7 +54,7 @@ exports.createAttraction = async (req, res) => {
 
 exports.getAttractions = async (req, res) => {
   const page = req.params.page || 1;
-  const limit = 4; // number of attractions per page
+  const limit = 6; // number of attractions per page
   const skip = page * limit - limit;
   // 1. Query the database for a list of all attractions
   const attractionsPromise = Attraction.find() // find attractions
