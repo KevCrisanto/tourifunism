@@ -58,6 +58,3 @@ typings/
 variables.env
 variables.env.now
 
-# ignore uploaded images
-public/uploads
-
