@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .inner
+    h2 Top #{attractions.length} Attractions
+    table.table
+      thead
+        td photo
+        td ranking
+        td name
+        td reviews
+        td Average Rating
+      each attraction, i in attractions
+        tr
+          td
+            a(href=`/attraction/${attraction.slug}`)
+              img(width=200 src=`/uploads/${attraction.photo || 'attraction.png'}` alt=attraction.name)
+          td #{i + 1}
+          td: a(href=`/attraction/${attraction.slug}`)= attraction.name
+          td= attraction.reviews.length
+          td #{Math.round(attraction.averageRating * 10) / 10} / 5

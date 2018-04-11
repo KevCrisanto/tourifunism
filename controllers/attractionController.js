@@ -170,3 +170,9 @@ exports.getHearts = async (req, res) => {
   });
   res.render('attractions', { title: 'Hearted attractions', attractions });
 };
+
+exports.getTopAttractions = async (req, res) => {
+  const attractions = await Attraction.getTopAttractions();
+  // res.json(attractions);
+  res.render('topAttractions', { attractions, title: '★ Top Attractions!' });
+};

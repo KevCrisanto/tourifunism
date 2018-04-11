@@ -13,6 +13,10 @@ mixin attractionCard(attraction ={})
           .attraction__action.attraction__action--edit
             a(href=`/attractions/${attraction._id}/edit`)
                 != h.icon('pencil')
+        if attraction.reviews
+          .attraction__action.attraction__action--count
+            != h.icon('review')
+            span= attraction.reviews.length
       img(src=`/uploads/${attraction.photo || 'attraction.png'}`)
       h2.title
           a(href=`/attraction/${attraction.slug}`) #{attraction.name}

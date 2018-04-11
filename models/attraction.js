@@ -63,7 +63,7 @@ attractionSchema.pre('save', async function(next) {
     return; // stop this function from running
   }
   this.slug = slug(this.name);
-  // find other stores that have a slug of att, att-1, att-2
+  // find other attractions that have a slug of att, att-1, att-2
   const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
   const attractionsWithSlug = await this.constructor.find({ slug: slugRegEx });
   if (attractionsWithSlug.length) {
@@ -81,11 +81,44 @@ attractionSchema.statics.getTagsList = function() {
   ]);
 };
 
+attractionSchema.statics.getTopAttractions = function() {
+  // aggregate and virtual attributes don't work together :(
+  return this.aggregate([
+    // lookup attractions and populate their reviews
+    { $lookup: { from: 'reviews', localField: '_id', foreignField: 'attraction', as: 'reviews' } },
+    // filter for only items that have 2 or more reviews
+    { $match: { 'reviews.1': { $exists: true } } },
+    // Add the average reviews field
+    {
+      $project: {
+        // add photo, name, reviews, and slug. Won't be needed in future versions of MongoDB
+        photo: '$$ROOT.photo',
+        name: '$$ROOT.name',
+        reviews: '$$ROOT.reviews',
+        slug: '$$ROOT.slug',
+        averageRating: { $avg: '$reviews.rating' },
+      },
+    },
+    // sort it by our new field, highest revies first
+    { $sort: { averageRating: -1 } },
+    // limit to at most 10
+    { $limit: 10 },
+  ]);
+};
+
 // find reviews where the attraction _id === reviews attraction property
 attractionSchema.virtual('reviews', {
   ref: 'Review', // link to reviewSchema
   localField: '_id', // id in attractionSchema
   foreignField: 'attraction', // must match store in reviewSchema
 });
+
+function autopopulate(next) {
+  this.populate('reviews');
+  next();
+}
+
+attractionSchema.pre('find', autopopulate);
+attractionSchema.pre('findOne', autopopulate);
 
 module.exports = mongoose.model('Attraction', attractionSchema);

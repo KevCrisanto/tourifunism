@@ -62,6 +62,8 @@ router.get('/hearts', catchErrors(attractionController.getHearts));
 
 router.post('/reviews/:id', authController.isLoggedIn, catchErrors(reviewController.addReview));
 
+router.get('/top', catchErrors(attractionController.getTopAttractions));
+
 /*
   API
 */
