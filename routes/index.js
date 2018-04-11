@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.get('/', catchErrors(attractionController.getAttractions));
 router.get('/attractions', catchErrors(attractionController.getAttractions));
+router.get('/attractions/page/:page', catchErrors(attractionController.getAttractions));
+
 router.get('/add', authController.isLoggedIn, attractionController.addAttraction);
 
 router.post(

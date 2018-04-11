@@ -53,9 +53,25 @@ exports.createAttraction = async (req, res) => {
 };
 
 exports.getAttractions = async (req, res) => {
+  const page = req.params.page || 1;
+  const limit = 4; // number of attractions per page
+  const skip = page * limit - limit;
   // 1. Query the database for a list of all attractions
-  const attractions = await Attraction.find();
-  res.render('attractions', { title: 'Tourist attractions', attractions }); // attractions: 'attractions'
+  const attractionsPromise = Attraction.find() // find attractions
+    .skip(skip) // skip stores if not in first page
+    .limit(limit) // limit number of stores
+    .sort({ created: 'desc' });
+
+  const countPromise = Attraction.count();
+
+  const [attractions, count] = await Promise.all([attractionsPromise, countPromise]);
+
+  const pages = Math.ceil(count / limit);
+  if (!attractions.length && skip) {
+    req.flash('info', `Hey! You asked for page ${page}. But that doesn't exist. So i put you  on page ${pages}`);
+    res.redirect(`/attractions/page/${pages}`);
+  }
+  res.render('attractions', { title: 'Tourist attractions', attractions, page, pages, count }); // attractions: 'attractions'
 };
 
 const confirmOwner = (attraction, user) => {

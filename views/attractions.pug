@@ -1,10 +1,12 @@
 extends layout
 
 include mixins/_attractionCard
+include mixins/_pagination
 
 block content
-    .inner 
-        h2 #{title}
-        .attractions
-            each attraction in attractions
-                +attractionCard(attraction)
+  .inner 
+    h2 #{title}
+    .attractions
+      each attraction in attractions
+        +attractionCard(attraction)
+    +pagination(page, pages, count)
