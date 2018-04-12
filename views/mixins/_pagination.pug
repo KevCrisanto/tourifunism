@@ -1,10 +1,10 @@
-mixin pagination(page, pages, count)
+mixin pagination(page, pages, count, url)
   .pagination
     .pagination__prev
       if page > 1
-        a(href=`/attractions/page/${parseFloat(page) - 1 }`) Prev
+        a(href=`${url}/page/${parseFloat(page) - 1 }`) Prev
     .pagination__text
       p Page #{page} of #{pages}
     .pagination__next
       if page < pages
-        a(href=`/attractions/page/${parseFloat(page) + 1 }`) Next
+        a(href=`${url}/page/${parseFloat(page) + 1 }`) Next

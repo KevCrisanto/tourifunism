@@ -34,6 +34,9 @@ router.get('/attraction/:slug', catchErrors(attractionController.getAttractionBy
 router.get('/tags', catchErrors(attractionController.getAttractionsByTag));
 router.get('/tags/:tag', catchErrors(attractionController.getAttractionsByTag));
 
+router.get('/tags/page/:page', catchErrors(attractionController.getAttractionsByTag));
+router.get('/tags/:tag/page/:page', catchErrors(attractionController.getAttractionsByTag));
+
 router.get('/login', userController.loginForm);
 router.post('/login', authController.login);
 

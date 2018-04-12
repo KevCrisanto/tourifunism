@@ -61,6 +61,7 @@ exports.getAttractions = async (req, res) => {
     .skip(skip) // skip stores if not in first page
     .limit(limit) // limit number of stores
     .sort({ created: 'desc' });
+  const url = '/attractions';
 
   const countPromise = Attraction.count();
 
@@ -71,7 +72,7 @@ exports.getAttractions = async (req, res) => {
     req.flash('info', `Hey! You asked for page ${page}. But that doesn't exist. So I put you on page ${pages}`);
     res.redirect(`/attractions/page/${pages}`);
   }
-  res.render('attractions', { title: 'Tourist attractions', attractions, page, pages, count }); // attractions: 'attractions'
+  res.render('attractions', { title: 'Tourist attractions', attractions, page, pages, count, url }); // attractions: 'attractions'
 };
 
 const confirmOwner = (attraction, user) => {
@@ -115,13 +116,29 @@ exports.getAttractionBySlug = async (req, res, next) => {
 };
 
 exports.getAttractionsByTag = async (req, res) => {
+  const page = req.params.page || 1;
+  const limit = 6; // number of attractions per page
+  const skip = page * limit - limit;
   const { tag } = req.params; // const tag = req.params.tag
+  const url = req.params.tag ? `/tags/${tag}` : '/tags';
   // Ask for attractions with the given tag. If there's no tag, return all attractions with at least one tag
   const tagQuery = tag || { $exists: true };
   const tagsPromise = Attraction.getTagsList();
-  const attractionsPromise = Attraction.find({ tags: tagQuery });
-  const [tags, attractions] = await Promise.all([tagsPromise, attractionsPromise]);
-  res.render('tag', { tags, title: 'Tags', tag, attractions });
+  const attractionsPromise = Attraction.find({ tags: tagQuery })
+    .skip(skip)
+    .limit(limit)
+    .sort({ created: 'desc' });
+
+  const countPromise = Attraction.count({ tags: tagQuery });
+
+  const [tags, attractions, count] = await Promise.all([tagsPromise, attractionsPromise, countPromise]);
+
+  const pages = Math.ceil(count / limit);
+  if (!attractions.length && skip) {
+    req.flash('info', `Hey! You asked for page ${page}. But that doesn't exist. So I put you on page ${pages}`);
+    res.redirect(`${url}/page/${pages}`);
+  }
+  res.render('tag', { tags, title: 'Tags', tag, attractions, page, pages, count, url });
 };
 
 exports.searchAttractions = async (req, res) => {
