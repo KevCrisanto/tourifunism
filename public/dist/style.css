@@ -495,6 +495,10 @@ p {
   margin-top: -9rem;
   font-size: 10rem;
   text-align: center; }
+  @media all and (max-width: 550px) {
+    .title--single {
+      max-width: 550px;
+      font-size: 5rem; } }
 
 input, textarea {
   width: 100%;
@@ -621,6 +625,7 @@ label {
     background: #303030;
     color: white;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     text-transform: uppercase;
     padding: 1.2rem 2rem 1rem 2rem;
     display: block;
@@ -665,10 +670,14 @@ label {
 @media all and (max-width: 900px) {
   .nav {
     -ms-flex-wrap: wrap;
-        flex-wrap: wrap; }
+        flex-wrap: wrap;
+    -ms-flex-pack: start;
+        justify-content: flex-start; }
     .nav__section {
       -ms-flex-order: 1;
           order: 1; }
+      .nav__section--user {
+        margin-left: auto; }
       .nav__section--search {
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         -ms-flex-order: 2;
@@ -694,7 +703,8 @@ label {
     .nav__link svg {
       max-width: 100%; }
     .nav__link--logo svg {
-      width: 100%; }
+      width: 100%;
+      height: 70px; }
   .heart-count:before {
     content: '\2665\FE0F';
     margin-right: 1rem; } }

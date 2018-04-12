@@ -48,7 +48,7 @@ exports.createAttraction = async (req, res) => {
   req.body.author = req.user._id;
   const attraction = await new Attraction(req.body).save();
   // await attraction.save();
-  req.flash('success', `Suuccessfully created ${attraction.name}. Care to leave a review?`);
+  req.flash('success', `Successfully created ${attraction.name}. Care to leave a review?`);
   res.redirect(`/attraction/${attraction.slug}`);
 };
 
@@ -68,7 +68,7 @@ exports.getAttractions = async (req, res) => {
 
   const pages = Math.ceil(count / limit);
   if (!attractions.length && skip) {
-    req.flash('info', `Hey! You asked for page ${page}. But that doesn't exist. So i put you  on page ${pages}`);
+    req.flash('info', `Hey! You asked for page ${page}. But that doesn't exist. So I put you on page ${pages}`);
     res.redirect(`/attractions/page/${pages}`);
   }
   res.render('attractions', { title: 'Tourist attractions', attractions, page, pages, count }); // attractions: 'attractions'
