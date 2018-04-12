@@ -198,10 +198,29 @@ exports.heartAttraction = async (req, res) => {
 };
 
 exports.getHearts = async (req, res) => {
-  const attractions = await Attraction.find({
+  const page = req.params.page || 1;
+  const limit = 6; // number of attractions per page
+  const skip = page * limit - limit;
+  const url = '/hearts';
+
+  const attractionsPromise = Attraction.find({
     _id: { $in: req.user.hearts },
-  });
-  res.render('attractions', { title: 'Hearted attractions', attractions });
+  })
+    .skip(skip)
+    .limit(limit)
+    .sort({ created: 'desc' });
+
+  const countPromise = Attraction.count({ _id: { $in: req.user.hearts } });
+
+  const [attractions, count] = await Promise.all([attractionsPromise, countPromise]);
+
+  const pages = Math.ceil(count / limit);
+  if (!attractions.length && skip) {
+    req.flash('info', `Hey! You asked for page ${page}. But that doesn't exist. So I put you on page ${pages}`);
+    res.redirect(`${url}/page/${pages}`);
+  }
+
+  res.render('attractions', { title: 'Hearted attractions', attractions, page, pages, count, url });
 };
 
 exports.getTopAttractions = async (req, res) => {

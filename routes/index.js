@@ -64,6 +64,7 @@ router.post(
 router.get('/map', attractionController.mapPage);
 
 router.get('/hearts', catchErrors(attractionController.getHearts));
+router.get('/hearts/page/:page', catchErrors(attractionController.getHearts));
 
 router.post('/reviews/:id', authController.isLoggedIn, catchErrors(reviewController.addReview));
 
