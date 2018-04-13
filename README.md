@@ -1,5 +1,5 @@
 # Tourifunism
-Fullstack  website created with Node.js, MongoDB, Express, and others.
+Full-stack web app created with Node.js, MongoDB, Express, and others.
 
 Its goal is to make tourism fun and easy.
 
