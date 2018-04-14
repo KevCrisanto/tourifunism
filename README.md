@@ -30,3 +30,8 @@ There are several ways to have easier access to some places:
 - Look for places close to a given address (10 km)
 
 ![search](/screenshots/search.gif)
+
+### Mobile friendly
+Looks great on mobile devices.
+
+![iphone](/screenshots/iphone.gif) ![iphone-landscape](/screenshots/iphone-landscape.gif)
